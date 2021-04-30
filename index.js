@@ -1,8 +1,9 @@
 const http = require("http")
 const https = require("https")
 var fs = require("fs")
+var helpers = require("./lib/helpers")
 const url = require("url")
-var handler = require("./lib/hanlers")
+var handlers = require("./lib/handlers")
 const StringDecoder = require("string_decoder").StringDecoder
 const config = require("./config")
 
@@ -57,7 +58,7 @@ var unifiedServer = function(req, res){
         buffer += decoder.end()
 
         //choose handler
-        var chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handler.notFound;
+        var chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
 
         //construct data object to send to the handlers
         var data = {
@@ -65,7 +66,7 @@ var unifiedServer = function(req, res){
             'queryStringObject' : queryStringObject,
             'method': method,
             'headers': headers,
-            'payload': buffer
+            'payload': helpers.parseJsonToObject(buffer)
         }
         //route the request to the handler chosen
         chosenHandler(data, function(statusCode, payload){
@@ -83,5 +84,6 @@ var unifiedServer = function(req, res){
 
 //define router
 var router = {
-    'ping': handler.ping
+    'ping': handlers.ping,
+    'users': handlers.users
 }
