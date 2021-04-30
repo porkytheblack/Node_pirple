@@ -2,6 +2,7 @@ const http = require("http")
 const https = require("https")
 var fs = require("fs")
 const url = require("url")
+var handler = require("./lib/hanlers")
 const StringDecoder = require("string_decoder").StringDecoder
 const config = require("./config")
 
@@ -78,23 +79,6 @@ var unifiedServer = function(req, res){
             console.log(trimmedPath, statusCode)
         })
     })
-}
-
-
-
-
-
-//define the handlers
-var handler = {}
-
-//sample handler
-handler.ping = function(data, callback){
-    callback(200)
-}
-
-//notFOundHandler
-handler.notFound = function(data,callback){
-    callback(404)
 }
 
 //define router
